@@ -1,0 +1,59 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: shardkeep
+      POSTGRES_USER: shardkeep
+      POSTGRES_PASSWORD: shardkeep
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  master:
+    build: .
+    environment:
+      DATABASE_URL: postgresql://shardkeep:shardkeep@postgres:5432/shardkeep
+      NODE_MODE: remote
+      NODE_HOSTS: node1,node2,node3,node4
+      NODE_SECRET: shardkeep-node-demo-secret
+      S3_BUCKET: ${S3_BUCKET:-}
+      AWS_REGION: ${AWS_REGION:-ap-south-1}
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+      - node1
+      - node2
+      - node3
+      - node4
+
+  node1:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    environment: { NODE_ID: "0", NODE_PORT: "5001", MASTER_URL: "http://master:5000", NODE_SECRET: "shardkeep-node-demo-secret" }
+    volumes: ["node1data:/app/node_storage"]
+  node2:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    environment: { NODE_ID: "1", NODE_PORT: "5002", MASTER_URL: "http://master:5000", NODE_SECRET: "shardkeep-node-demo-secret" }
+    volumes: ["node2data:/app/node_storage"]
+  node3:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    environment: { NODE_ID: "2", NODE_PORT: "5003", MASTER_URL: "http://master:5000", NODE_SECRET: "shardkeep-node-demo-secret" }
+    volumes: ["node3data:/app/node_storage"]
+  node4:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    environment: { NODE_ID: "3", NODE_PORT: "5004", MASTER_URL: "http://master:5000", NODE_SECRET: "shardkeep-node-demo-secret" }
+    volumes: ["node4data:/app/node_storage"]
+
+volumes:
+  pgdata:
+  node1data:
+  node2data:
+  node3data:
+  node4data:

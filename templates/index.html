@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shardkeep — Distributed File Storage</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- ============ LOGIN / SIGNUP / FORGOT ============ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="brand"><div class="mark">SK</div><div class="name">Shardkeep</div></div>
+
+    <div id="authView">
+      <h1 id="authTitle">Sign in to your vault</h1>
+      <p class="sub" id="authSub">Distributed storage, chunked, replicated, self-healing.</p>
+
+      <div class="tabs">
+        <div class="tab active" id="tabSignin">Sign in</div>
+        <div class="tab" id="tabSignup">Create account</div>
+      </div>
+
+      <div id="signinFields">
+        <label for="loginId">Username or email</label>
+        <input type="text" id="loginId" autocomplete="username" placeholder="Username or Email">
+        <label for="loginPass">Password</label>
+        <input type="password" id="loginPass" autocomplete="current-password" placeholder="Password">
+        <div class="remember-row">
+          <label class="remember-check"><input type="checkbox" id="rememberMe"> Remember me</label>
+          <button class="link-btn" id="forgotLink">Forgot password?</button>
+        </div>
+        <button class="login-btn" id="signinBtn">Sign in</button>
+      </div>
+
+      <div id="signupFields" class="hidden">
+        <label for="suUsername">Username</label>
+        <input type="text" id="suUsername" autocomplete="username" placeholder="choose a username">
+        <label for="suEmail">Email</label>
+        <input
+    type="email"
+    id="suEmail"
+    autocomplete="email"
+    placeholder="you@gmail.com"
+    pattern="[A-Za-z0-9._%+-]+@gmail\.com"
+    title="Please enter a valid Gmail address ending with @gmail.com"
+    required
+>
+        <label for="suPass">Password</label>
+        <input type="password" id="suPass" autocomplete="new-password" placeholder="choose a password">
+        <button class="login-btn" id="signupBtn">Create account</button>
+      </div>
+
+      <div class="form-msg" id="authMsg"></div>
+    </div>
+
+    <div id="forgotStep1" class="hidden">
+      <h1>Reset your password</h1>
+      <p class="sub">Enter the username or email on your account</p>
+      <label for="forgotId">Username or email</label>
+      <input type="text" id="forgotId" placeholder="username or email">
+      <button class="login-btn" id="sendCodeBtn">Send reset code</button>
+      <div class="form-msg" id="forgotMsg1"></div>
+      <span class="back-to-signin" id="backFromForgot1">← back to sign in</span>
+    </div>
+
+    <div id="forgotStep2" class="hidden">
+      <h1>Check your "inbox"</h1>
+      <p class="sub">No mail server in this build — here's the code that would've been emailed:</p>
+      <div class="reset-code-box" id="resetCodeDisplay">000000</div>
+      <div class="step-note">In production this box wouldn't exist; the code would only ever arrive by email.</div>
+      <label for="enteredCode">Enter the code</label>
+      <input type="text" id="enteredCode" placeholder="6-digit code">
+      <label for="newPass">New password</label>
+      <input type="password" id="newPass" placeholder="choose a new password">
+      <button class="login-btn" id="resetPassBtn">Reset password</button>
+      <div class="form-msg" id="forgotMsg2"></div>
+      <span class="back-to-signin" id="backFromForgot2">← back to sign in</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div id="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="mark">SK</div><div class="name">Shardkeep</div></div>
+    <nav>
+      <div class="nav-item active" data-view="overview">📊 Overview</div>
+      <div class="nav-item" data-view="files">🗂️ My Files</div>
+      <div class="nav-item" data-view="nodes">🖥️ Nodes &amp; Health</div>
+      <div class="nav-item" data-view="sharing">🔗 Sharing</div>
+      <div class="nav-item" data-view="benchmarks">⚡ Performance</div>
+      <div class="nav-item" data-view="activity">🛰️ Activity Log</div>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="whoami">Signed in as<br><b id="whoami"></b></div>
+      <button class="logout-btn" id="logoutBtn">Log out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- OVERVIEW -->
+    <section id="view-overview" class="view active">
+      <h1 class="view-title">Cluster Overview</h1>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">Nodes online</div><div class="stat-value" id="statNodes">—</div></div>
+        <div class="stat-card"><div class="stat-label">Your files</div><div class="stat-value" id="statFiles">—</div></div>
+        <div class="stat-card"><div class="stat-label">Chunks stored</div><div class="stat-value" id="statChunks">—</div></div>
+        <div class="stat-card"><div class="stat-label">Replica copies</div><div class="stat-value" id="statReplicas">—</div></div>
+        <div class="stat-card"><div class="stat-label">Active share links</div><div class="stat-value" id="statShares">—</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h2>Replication health</h2></div>
+        <div class="repl-health-row">
+          <div class="ring-wrap" id="replRing"></div>
+          <div class="repl-legend">
+            <div><span class="dot healthy"></span> Healthy — <span id="replHealthyCount">0</span> file(s)</div>
+            <div><span class="dot degraded"></span> Degraded (on replica) — <span id="replDegradedCount">0</span> file(s)</div>
+            <div><span class="dot critical"></span> Critical (unavailable) — <span id="replCriticalCount">0</span> file(s)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>How Shardkeep works</h2>
+        <ol class="how-list">
+          <li><b>Chunking</b> — every upload is split into 256 KB pieces.</li>
+          <li><b>Load-balanced placement</b> — each chunk's primary and replica copy go to whichever nodes currently hold the least data.</li>
+          <li><b>Replication</b> — every chunk exists on two nodes at once, across a 4-node cluster.</li>
+          <li><b>Integrity checks</b> — SHA-256 hashes catch corrupted chunks on download and fall back to the replica.</li>
+          <li><b>Self-healing</b> — mark a node offline and Shardkeep automatically re-replicates its chunks onto a healthy node.</li>
+          <li><b>Hybrid cloud backup</b> — optionally keep a full off-cluster copy as a last-resort restore path.</li>
+          <li><b>Secure sharing</b> — generate public links with optional password protection, expiry, and download limits.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- PERFORMANCE -->
+    <section id="view-benchmarks" class="view">
+      <h1 class="view-title">Performance &amp; Capacity</h1>
+      <div class="panel">
+        <div class="panel-head"><h2>Live cluster benchmark</h2><button class="corrupt-btn" id="runBenchmarkBtn">Run benchmark</button></div>
+        <div id="benchmarkSummary" class="mono-dim">Run the benchmark to measure current placement latency, capacity, and node utilization.</div>
+        <div id="benchmarkTable"></div>
+      </div>
+    </section>
+
+    <!-- FILES -->
+    <section id="view-files" class="view">
+      <h1 class="view-title">My Files</h1>
+      <div class="panel">
+        <div id="dropzone">
+          <div class="big">Click to upload one or multiple files, or drag files here</div>
+          <div class="small">Files are chunked, hashed, rack-aware replicated, and intelligently load-balanced across 4 × 10 GB nodes</div>
+          <label class="backup-check"><input type="checkbox" id="cloudBackupCheck"> Also back this file up to hybrid cloud storage</label>
+        </div>
+        <input type="file" id="fileInput" multiple>
+      </div>
+      <div class="file-grid" id="fileGrid"></div>
+    </section>
+
+    <!-- FILE DETAIL (hidden until a file is opened) -->
+    <section id="view-detail" class="view">
+      <div class="detail-title">
+        <h1 class="view-title" id="detailFileName" style="margin:0;"></h1>
+        <span class="back-link" id="backLink">← back to files</span>
+      </div>
+      <div id="detailFileMeta" class="mono-dim"></div>
+
+      <div class="panel">
+        <div class="panel-head"><h2>Secure sharing</h2></div>
+        <div class="share-form">
+          <div class="share-field">
+            <label>Password (optional)</label>
+            <input type="text" id="sharePassword" placeholder="leave blank for no password">
+          </div>
+          <div class="share-field">
+            <label>Expires in</label>
+            <select id="shareExpiry">
+              <option value="">Never</option>
+              <option value="1">1 hour</option>
+              <option value="24" selected>24 hours</option>
+              <option value="168">7 days</option>
+            </select>
+          </div>
+          <div class="share-field">
+            <label>Download limit</label>
+            <select id="shareLimit">
+              <option value="">Unlimited</option>
+              <option value="1">1 download</option>
+              <option value="5" selected>5 downloads</option>
+              <option value="20">20 downloads</option>
+            </select>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="ghost-btn" id="shareBtn">Generate share link</button>
+          <button class="main-btn" id="downloadBtn">Reconstruct &amp; download</button>
+          <button class="danger-btn" id="deleteFileBtn">Delete file</button>
+        </div>
+        <div id="shareResult" class="mono-dim" style="margin-top:10px; display:none;"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Chunk metadata</h2>
+        <div class="table-wrap"><table id="metaTable">
+          <thead><tr><th>Chunk</th><th>Size</th><th>Primary</th><th>Replica</th><th>SHA-256</th><th>Status</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2>Reconstruction log</h2>
+        <div id="log"></div>
+      </div>
+    </section>
+
+    <!-- NODES & HEALTH -->
+    <section id="view-nodes" class="view">
+      <h1 class="view-title">Nodes &amp; Predictive Health</h1>
+      <p class="mono-dim view-sub">4 × 10 GB nodes · rack-aware placement · HTTP heartbeats · automatic failure detection · background integrity repair.</p>
+      <div class="nodes" id="nodeGrid"></div>
+    </section>
+
+    <!-- SHARING MANAGER -->
+    <section id="view-sharing" class="view">
+      <h1 class="view-title">Sharing Manager</h1>
+      <p class="mono-dim view-sub">Generate secure links for one file or bundle multiple stored files into a single share link.</p>
+      <div class="panel">
+        <div class="panel-head"><h2>Share multiple files with one link</h2></div>
+        <div class="share-form multi-share-form">
+          <div class="share-field multi-file-select"><label>Select stored files</label><select id="multiShareFiles" multiple size="6"></select></div>
+          <div class="share-field"><label>Password (optional)</label><input type="text" id="multiSharePassword" placeholder="leave blank for no password"></div>
+          <div class="share-field"><label>Expires in</label><select id="multiShareExpiry"><option value="">Never</option><option value="1">1 hour</option><option value="24" selected>24 hours</option><option value="168">7 days</option></select></div>
+          <div class="share-field"><label>Download limit</label><select id="multiShareLimit"><option value="">Unlimited</option><option value="1">1 use</option><option value="5" selected>5 uses</option><option value="20">20 uses</option></select></div>
+        </div>
+        <button class="ghost-btn" id="multiShareBtn">🔗 Create one link for selected files</button>
+        <div id="multiShareResult" class="mono-dim" style="margin-top:10px;display:none"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>Single-file links</h2></div>
+        <div class="table-wrap"><table id="sharesTable">
+          <thead><tr><th>File</th><th>Link</th><th>Protection</th><th>Expiry</th><th>Downloads</th><th>Status</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table></div>
+        <div class="empty-note" id="sharesEmpty" style="display:none; margin-top:14px;">No single-file share links yet — open a file and generate one.</div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>Multi-file links</h2></div>
+        <div class="table-wrap"><table id="collectionSharesTable">
+          <thead><tr><th>Files</th><th>Link</th><th>Protection</th><th>Expiry</th><th>Downloads</th><th>Status</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table></div>
+        <div class="empty-note" id="collectionSharesEmpty" style="display:none; margin-top:14px;">No multi-file share links yet.</div>
+      </div>
+    </section>
+
+    <!-- ACTIVITY LOG -->
+    <section id="view-activity" class="view">
+      <h1 class="view-title">Activity Log</h1>
+      <div class="panel">
+        <div id="globalLog"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
