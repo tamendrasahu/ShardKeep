@@ -524,7 +524,10 @@ def heartbeat_agent(node_id):
             enabled = row["heartbeat_enabled"] if row and isinstance(row, dict) else (row[0] if row else 0)
             if row and enabled:
                 req = urllib.request.Request(
-                    f"http://127.0.0.1:5000/api/heartbeat/{node_id}", data=b"", method="POST")
+    f"http://127.0.0.1:{os.environ.get('PORT', '5000')}/api/heartbeat/{node_id}",
+    data=b"",
+    method="POST"
+)
                 urllib.request.urlopen(req, timeout=1.5).read()
         except Exception:
             pass
