@@ -393,46 +393,77 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
     font-size: 14px;
     border-top: 1px solid rgba(255,255,255,0.08);
 }
-/* ===== USER THREE-DOT MENU ===== */
+/* ===== SHARDKEEP USER MENU ===== */
+
+.sidebar-foot {
+    position: relative;
+    margin-top: auto;
+    padding: 18px 16px 22px;
+}
 
 .user-menu {
     position: relative;
-    padding: 10px 14px;
 }
 
 .user-info {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
+    min-height: 55px;
+    padding: 8px 4px;
+}
+
+.user-info::before {
+    content: "P";
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #159f91, #35c9b5);
+    color: #071016;
+    font-weight: 700;
+    font-size: 17px;
+    flex-shrink: 0;
+}
+
+#whoami {
+    flex: 1;
+    color: #f1f5f9;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .three-dot-btn {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border: none;
     background: transparent;
-    color: #9aa6b8;
-    font-size: 25px;
+    color: #cbd5e1;
+    font-size: 26px;
     cursor: pointer;
     border-radius: 8px;
 }
 
 .three-dot-btn:hover {
-    color: #55d6c2;
-    background: rgba(85, 214, 194, 0.08);
+    background: rgba(255,255,255,0.08);
+    color: #42d9c4;
 }
+
+/* LOGOUT POPUP */
 
 .user-dropdown {
     display: none;
     position: absolute;
-    left: 10px;
-    top: 48px;
-    min-width: 130px;
-    padding: 6px;
-    background: #151b26;
-    border: 1px solid rgba(255,255,255,0.12);
+    left: 135px;
+    bottom: 0;
+    width: 150px;
+    padding: 7px;
+    background: #111925;
+    border: 1px solid rgba(160,180,220,0.30);
     border-radius: 10px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.45);
     z-index: 9999;
 }
 
@@ -440,41 +471,53 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
     display: block;
 }
 
-.user-dropdown .logout-btn {
+.logout-btn {
     width: 100%;
     border: none;
     background: transparent;
-    color: #ff7186;
-    padding: 10px 12px;
-    text-align: left;
+    color: #f1f5f9;
+    padding: 12px 14px;
     border-radius: 7px;
+    text-align: left;
     cursor: pointer;
 }
 
-.user-dropdown .logout-btn:hover {
-    background: rgba(255,80,100,0.10);
+.logout-btn:hover {
+    background: rgba(255,255,255,0.08);
+    color: #42d9c4;
 }
 
-
-/* ===== MOBILE ===== */
+/* MOBILE */
 
 @media (max-width: 768px) {
 
     .user-menu {
         position: fixed;
-        top: 10px;
+        top: 12px;
         right: 12px;
         z-index: 9999;
         padding: 0;
     }
 
     .user-info {
-        justify-content: flex-end;
+        gap: 7px;
+        padding: 0;
+        border: none;
+    }
+
+    .user-info::before {
+        width: 38px;
+        height: 38px;
+    }
+
+    #whoami {
+        font-size: 15px;
     }
 
     .user-dropdown {
         left: auto;
         right: 0;
-        top: 42px;
+        top: 45px;
+        bottom: auto;
     }
 }
