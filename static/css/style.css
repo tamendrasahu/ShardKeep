@@ -385,3 +385,11 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
 .share-generated-text{flex:1;min-width:0;overflow-wrap:anywhere;word-break:break-word;}
 .copy-share-btn{white-space:nowrap;flex:0 0 auto;}
 @media (max-width:800px){.share-generated{display:block;}.copy-share-btn{width:100%;margin-top:10px;min-height:42px;}}
+.site-footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    color: #8b9bb4;
+    font-size: 14px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
