@@ -1295,8 +1295,10 @@ def metrics_loop():
 def index():
     return render_template("index.html")
 
+# ---------------------------------------------------------------- startup
 
-if __name__ == "__main__":
+def start_background_services():
+    """Initialize the database and start Shardkeep background services."""
     fresh = init_db()
 
     threading.Thread(target=metrics_loop, daemon=True).start()
@@ -1311,13 +1313,23 @@ if __name__ == "__main__":
                 daemon=True
             ).start()
 
+    return fresh
+
+
+# Initialize when Gunicorn imports app:app
+fresh = start_background_services()
+
+print("Shardkeep application initialized.")
+print("4 nodes × 10 GB | rack-aware placement | HTTP heartbeats | 30s integrity scan")
+
+if fresh:
+    print("Fresh database created — sign up for a new account from the login screen.")
+
+
+if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
 
     print(f"Shardkeep starting on port {port}")
-    print("4 nodes × 10 GB | rack-aware placement | HTTP heartbeats | 30s integrity scan")
-
-    if fresh:
-        print("Fresh database created — sign up for a new account from the login screen.")
 
     app.run(
         debug=False,
