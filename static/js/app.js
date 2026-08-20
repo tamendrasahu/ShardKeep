@@ -536,3 +536,28 @@ document.getElementById('multiShareBtn').onclick = async () => {
     if(d.loggedIn){ enterApp(d.username); }
   }catch(e){}
 })();
+/* ===== USER THREE-DOT MENU ===== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const button = document.getElementById("userMenuBtn");
+    const dropdown = document.getElementById("userDropdown");
+
+    if (!button || !dropdown) return;
+
+    button.addEventListener("click", function (event) {
+        event.stopPropagation();
+        dropdown.classList.toggle("show");
+    });
+
+    document.addEventListener("click", function (event) {
+
+        if (!dropdown.contains(event.target) &&
+            !button.contains(event.target)) {
+
+            dropdown.classList.remove("show");
+        }
+
+    });
+
+});

@@ -94,9 +94,17 @@
       <div class="nav-item" data-view="activity">🛰️ Activity Log</div>
     </nav>
     <div class="sidebar-foot">
-      <div class="whoami">Signed in as<br><b id="whoami"></b></div>
-      <button class="logout-btn" id="logoutBtn">Log out</button>
+    <div class="user-menu">
+        <div class="user-info">
+            <button class="three-dot-btn" id="userMenuBtn">⋮</button>
+            <b id="whoami"></b>
+        </div>
+
+        <div class="user-dropdown" id="userDropdown">
+            <button class="logout-btn" id="logoutBtn">↪ Logout</button>
+        </div>
     </div>
+</div>
   </aside>
 
   <main class="main">
