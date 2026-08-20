@@ -395,10 +395,27 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
 }
 /* ===== SHARDKEEP USER MENU ===== */
 
-.sidebar-foot {
+.sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Shardkeep logo stays first */
+.sidebar > .brand {
+    order: 1;
+}
+
+/* User menu directly below Shardkeep */
+.sidebar > .sidebar-foot {
+    order: 2;
     position: relative;
-    margin-top: auto;
-    padding: 18px 16px 22px;
+    margin-top: 8px;
+    padding: 10px 16px 18px;
+}
+
+/* Navigation after user menu */
+.sidebar > nav {
+    order: 3;
 }
 
 .user-menu {
@@ -411,10 +428,10 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
     gap: 12px;
     min-height: 55px;
     padding: 8px 4px;
+    border-bottom: 1px solid rgba(255,255,255,0.10);
 }
 
-.user-info::before {
-    content: "P";
+.user-avatar {
     width: 42px;
     height: 42px;
     border-radius: 50%;
@@ -451,13 +468,12 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
     color: #42d9c4;
 }
 
-/* LOGOUT POPUP */
-
+/* Logout popup */
 .user-dropdown {
     display: none;
     position: absolute;
     left: 135px;
-    bottom: 0;
+    top: 45px;
     width: 150px;
     padding: 7px;
     background: #111925;
@@ -487,27 +503,31 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
     color: #42d9c4;
 }
 
-/* MOBILE */
+
+/* ===== MOBILE ===== */
 
 @media (max-width: 768px) {
 
-    .user-menu {
+    .sidebar > .sidebar-foot {
         position: fixed;
         top: 12px;
         right: 12px;
-        z-index: 9999;
+        left: auto;
+        margin: 0;
         padding: 0;
+        z-index: 9999;
     }
 
     .user-info {
         gap: 7px;
         padding: 0;
-        border: none;
+        border-bottom: none;
     }
 
-    .user-info::before {
+    .user-avatar {
         width: 38px;
         height: 38px;
+        font-size: 15px;
     }
 
     #whoami {
@@ -518,9 +538,5 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
         left: auto;
         right: 0;
         top: 45px;
-        bottom: auto;
     }
-}
-.user-info {
-    border-bottom: 1px solid rgba(255,255,255,0.10);
 }

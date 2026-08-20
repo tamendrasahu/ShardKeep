@@ -85,21 +85,14 @@
 <div id="app">
   <aside class="sidebar">
     <div class="brand"><div class="mark">SK</div><div class="name">Shardkeep</div></div>
-    <nav>
-      <div class="nav-item active" data-view="overview">📊 Overview</div>
-      <div class="nav-item" data-view="files">🗂️ My Files</div>
-      <div class="nav-item" data-view="nodes">🖥️ Nodes &amp; Health</div>
-      <div class="nav-item" data-view="sharing">🔗 Sharing</div>
-      <div class="nav-item" data-view="benchmarks">⚡ Performance</div>
-      <div class="nav-item" data-view="activity">🛰️ Activity Log</div>
-    </nav>
-  <div class="sidebar-foot">
+    <!-- USER MENU: directly below Shardkeep -->
+<div class="sidebar-foot">
     <div class="user-menu">
 
         <div class="user-info">
-            <div class="user-avatar" id="userAvatar">P</div>
+            <div class="user-avatar" id="userAvatar"></div>
 
-            <b id="whoami">panku1</b>
+            <b id="whoami"></b>
 
             <button class="three-dot-btn" id="userMenuBtn">
                 ⋮
@@ -114,6 +107,17 @@
 
     </div>
 </div>
+
+<!-- NAVIGATION -->
+<nav>
+    <div class="nav-item active" data-view="overview">📊 Overview</div>
+    <div class="nav-item" data-view="files">🗂️ My Files</div>
+    <div class="nav-item" data-view="nodes">🖥️ Nodes &amp; Health</div>
+    <div class="nav-item" data-view="sharing">🔗 Sharing</div>
+    <div class="nav-item" data-view="benchmarks">⚡ Performance</div>
+    <div class="nav-item" data-view="activity">🛰️ Activity Log</div>
+</nav>
+    
   </aside>
 
   <main class="main">
