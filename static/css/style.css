@@ -521,3 +521,6 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
         bottom: auto;
     }
 }
+.user-info {
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+}
