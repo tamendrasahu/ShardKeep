@@ -15,12 +15,29 @@ function renderGlobalLog(){
 
 async function api(path, opts={}){
   const res = await fetch(path, {
-    headers: opts.body instanceof FormData ? {} : {'Content-Type':'application/json'},
+    headers: opts.body instanceof FormData
+      ? {}
+      : {'Content-Type':'application/json'},
     credentials:'same-origin',
     ...opts
   });
-  const data = await res.json().catch(()=> ({}));
-  if(!res.ok){ throw new Error(data.error || 'Request failed'); }
+
+  const text = await res.text();
+
+  let data = {};
+  try {
+    data = text ? JSON.parse(text) : {};
+  } catch (_) {
+    data = {};
+  }
+
+  if(!res.ok){
+    throw new Error(
+      data.error ||
+      `Server error ${res.status}: ${text || res.statusText}`
+    );
+  }
+
   return data;
 }
 
