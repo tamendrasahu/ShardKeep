@@ -148,9 +148,10 @@ def get_db():
                 raise RuntimeError("DATABASE_URL is set for PostgreSQL, but psycopg is not installed. Run: pip install -r requirements.txt")
             g.db = psycopg.connect(DATABASE_URL, row_factory=dict_row)
         else:
-            g.db = sqlite3.connect(DB_PATH)
+            g.db = sqlite3.connect(DB_PATH,timeout=10)
             g.db.row_factory = sqlite3.Row
             g.db.execute("PRAGMA foreign_keys = ON")
+            g.db.execute("PRAGMA busy_timeout = 10000")
     return g.db
 
 def db_execute(db, sql, params=()):
@@ -438,14 +439,36 @@ def re_replicate_node_data(db, failed_node_id, events):
 def api_heartbeat(node_id):
     if NODE_MODE == "remote" and request.headers.get("X-Node-Secret") != NODE_SECRET:
         return jsonify(error="Invalid node secret."), 401
+
     db = get_db()
-    row = db_execute(db, "SELECT * FROM nodes WHERE id=?", (node_id,)).fetchone()
+
+    row = db_execute(
+        db,
+        "SELECT * FROM nodes WHERE id=?",
+        (node_id,)
+    ).fetchone()
+
     if not row:
         return jsonify(error="No such node."), 404
+
     if not row["heartbeat_enabled"]:
         return jsonify(ok=False), 409
-    db_execute(db, "UPDATE nodes SET last_heartbeat=?, alive=1 WHERE id=?", (time.time(), node_id))
-    db.commit()
+
+    try:
+        db_execute(
+            db,
+            "UPDATE nodes SET last_heartbeat=?, alive=1 WHERE id=?",
+            (time.time(), node_id)
+        )
+
+        db.commit()
+
+    except sqlite3.OperationalError as e:
+        if "locked" in str(e).lower():
+            db.rollback()
+            return jsonify(ok=False, error="Database busy, retry heartbeat."), 503
+        raise
+
     return jsonify(ok=True)
 
 
