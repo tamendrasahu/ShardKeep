@@ -508,31 +508,9 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
 
 @media screen and (max-width: 768px) {
 
-    /* Sidebar becomes normal mobile header */
-    .sidebar {
-        width: 100% !important;
-        height: auto !important;
-        min-height: 0 !important;
-        position: relative !important;
-        display: block !important;
-        border-right: none !important;
-    }
-
-    /* Shardkeep logo at top */
-    .sidebar > .brand {
-        display: flex !important;
-        align-items: center !important;
-        padding: 14px 20px !important;
-    }
-
-    /* Hide desktop navigation */
-    .sidebar > nav {
-        display: none !important;
-    }
-
-    /* User menu at top-right */
-    .sidebar > .sidebar-foot {
-        position: absolute !important;
+    /* USER MENU - MOBILE */
+    .sidebar-foot {
+        position: fixed !important;
         top: 12px !important;
         right: 12px !important;
         left: auto !important;
@@ -571,7 +549,7 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
         height: 34px !important;
     }
 
-    /* Logout dropdown */
+    /* LOGOUT DROPDOWN */
     .user-dropdown {
         position: absolute !important;
         top: 45px !important;
@@ -581,5 +559,4 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
         width: 140px !important;
         z-index: 999999 !important;
     }
-
 }
