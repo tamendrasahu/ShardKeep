@@ -136,12 +136,18 @@ document.getElementById('resetPassBtn').onclick = async () => {
 
 /* ---------------- App shell ---------------- */
 function enterApp(username){
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('app').classList.add('shown');
-  document.getElementById('whoami').textContent = username;
-  pushGlobal('ok', `Signed in as ${username}.`);
-  switchView('overview');
-  refreshEverything();
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').classList.add('shown');
+
+    document.getElementById('whoami').textContent = username;
+
+    // Show first letter of username inside avatar
+    document.getElementById('userAvatar').textContent =
+        username.charAt(0).toUpperCase();
+
+    pushGlobal('ok', `Signed in as ${username}.`);
+    switchView('overview');
+    refreshEverything();
   setInterval(() => { if(document.getElementById('app').classList.contains('shown')) refreshNodesAndFiles(); }, 5000);
 }
 
