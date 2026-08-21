@@ -504,14 +504,36 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
 }
 
 
-/* ===== MOBILE ===== */
-/* ===== MOBILE USER MENU FIX ===== */
+/* ===== FINAL MOBILE LAYOUT ===== */
 
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
 
-    .sidebar-foot {
-        position: fixed !important;
-        top: 10px !important;
+    /* Sidebar becomes normal mobile header */
+    .sidebar {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        position: relative !important;
+        display: block !important;
+        border-right: none !important;
+    }
+
+    /* Shardkeep logo at top */
+    .sidebar > .brand {
+        display: flex !important;
+        align-items: center !important;
+        padding: 14px 20px !important;
+    }
+
+    /* Hide desktop navigation */
+    .sidebar > nav {
+        display: none !important;
+    }
+
+    /* User menu at top-right */
+    .sidebar > .sidebar-foot {
+        position: absolute !important;
+        top: 12px !important;
         right: 12px !important;
         left: auto !important;
         bottom: auto !important;
@@ -521,45 +543,43 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
         z-index: 99999 !important;
     }
 
-    .user-menu {
-        position: relative !important;
-    }
-
     .user-info {
         display: flex !important;
         align-items: center !important;
-        gap: 7px !important;
-        min-height: auto !important;
+        gap: 6px !important;
         padding: 0 !important;
         border: none !important;
     }
 
     .user-avatar {
-        width: 36px !important;
-        height: 36px !important;
-        font-size: 14px !important;
+        width: 38px !important;
+        height: 38px !important;
     }
 
     #whoami {
+        display: block !important;
+        max-width: 90px !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
         font-size: 14px !important;
-        max-width: 100px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
     }
 
     .three-dot-btn {
+        display: block !important;
         width: 34px !important;
         height: 34px !important;
-        font-size: 25px !important;
     }
 
+    /* Logout dropdown */
     .user-dropdown {
         position: absolute !important;
-        top: 42px !important;
+        top: 45px !important;
         right: 0 !important;
         left: auto !important;
         bottom: auto !important;
         width: 140px !important;
+        z-index: 999999 !important;
     }
+
 }
