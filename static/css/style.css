@@ -503,16 +503,15 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
     color: #42d9c4;
 }
 
-
-/* ===== FINAL MOBILE LAYOUT ===== */
+/* ===== MOBILE USER MENU ===== */
 
 @media screen and (max-width: 768px) {
 
-    /* USER MENU - MOBILE */
+    /* Keep the existing mobile sidebar/layout */
     .sidebar-foot {
         position: fixed !important;
-        top: 12px !important;
-        right: 12px !important;
+        top: 10px !important;
+        right: 10px !important;
         left: auto !important;
         bottom: auto !important;
         width: auto !important;
@@ -521,17 +520,23 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
         z-index: 99999 !important;
     }
 
+    .user-menu {
+        position: relative !important;
+    }
+
     .user-info {
         display: flex !important;
         align-items: center !important;
         gap: 6px !important;
+        min-height: 0 !important;
         padding: 0 !important;
         border: none !important;
     }
 
     .user-avatar {
-        width: 38px !important;
-        height: 38px !important;
+        width: 36px !important;
+        height: 36px !important;
+        flex-shrink: 0 !important;
     }
 
     #whoami {
@@ -544,15 +549,16 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
     }
 
     .three-dot-btn {
-        display: block !important;
-        width: 34px !important;
-        height: 34px !important;
+        width: 32px !important;
+        height: 32px !important;
+        padding: 0 !important;
+        font-size: 24px !important;
     }
 
-    /* LOGOUT DROPDOWN */
+    /* Logout dropdown */
     .user-dropdown {
         position: absolute !important;
-        top: 45px !important;
+        top: 42px !important;
         right: 0 !important;
         left: auto !important;
         bottom: auto !important;
