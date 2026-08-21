@@ -509,9 +509,10 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
 
     /* Keep the existing mobile sidebar/layout */
     .sidebar-foot {
-        position: fixed !important;
+         display: block !important;
+    position: fixed !important;
         top: 10px !important;
-        right: 10px !important;
+        right: 18px !important;
         left: auto !important;
         bottom: auto !important;
         width: auto !important;
@@ -534,8 +535,9 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
     }
 
     .user-avatar {
-        width: 36px !important;
-        height: 36px !important;
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 13px !important;
         flex-shrink: 0 !important;
     }
 
