@@ -505,38 +505,61 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
 
 
 /* ===== MOBILE ===== */
+/* ===== MOBILE USER MENU FIX ===== */
 
 @media (max-width: 768px) {
 
-    .sidebar > .sidebar-foot {
-        position: fixed;
-        top: 12px;
-        right: 12px;
-        left: auto;
-        margin: 0;
-        padding: 0;
-        z-index: 9999;
+    .sidebar-foot {
+        position: fixed !important;
+        top: 10px !important;
+        right: 12px !important;
+        left: auto !important;
+        bottom: auto !important;
+        width: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        z-index: 99999 !important;
+    }
+
+    .user-menu {
+        position: relative !important;
     }
 
     .user-info {
-        gap: 7px;
-        padding: 0;
-        border-bottom: none;
+        display: flex !important;
+        align-items: center !important;
+        gap: 7px !important;
+        min-height: auto !important;
+        padding: 0 !important;
+        border: none !important;
     }
 
     .user-avatar {
-        width: 38px;
-        height: 38px;
-        font-size: 15px;
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 14px !important;
     }
 
     #whoami {
-        font-size: 15px;
+        font-size: 14px !important;
+        max-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .three-dot-btn {
+        width: 34px !important;
+        height: 34px !important;
+        font-size: 25px !important;
     }
 
     .user-dropdown {
-        left: auto;
-        right: 0;
-        top: 45px;
+        position: absolute !important;
+        top: 42px !important;
+        right: 0 !important;
+        left: auto !important;
+        bottom: auto !important;
+        width: 140px !important;
     }
 }
