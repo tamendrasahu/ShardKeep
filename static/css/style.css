@@ -568,3 +568,124 @@ button.ghost-btn:hover{border-color:var(--text-dim);}
         z-index: 999999 !important;
     }
 }
+/* ===== LOGIN INPUT ICONS ===== */
+
+.input-icon-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.input-icon-wrap input {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 42px !important;
+    padding-right: 42px !important;
+}
+
+.input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    opacity: 0.7;
+    z-index: 2;
+}
+.password-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrap input {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 45px !important;
+    padding-right: 45px !important;
+}
+
+.password-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    font-size: 16px;
+}
+
+.password-eye {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    color:white;
+    transform: translateY(-50%);
+    z-index: 2;
+    border: none;
+    background: transparent;
+    padding: 4px;
+    cursor: pointer;
+}
+
+
+/* ===== SOCIAL LOGIN ===== */
+
+.or-divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 22px 0 16px;
+}
+
+.or-divider::before,
+.or-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.15);
+}
+
+.or-divider span {
+    color: #9aa4b2;
+    font-size: 13px;
+}
+
+.social-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+}
+
+.social-btn {
+    width: 52px;
+    height: 48px;
+    padding: 0;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 9px;
+    background: #fff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+.social-btn:hover {
+    transform: translateY(-2px);
+}
+.social-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 12px 0 10px;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.social-divider span {
+    white-space: nowrap;
+}
+#signupFields .password-wrap input {
+    text-align: left !important;
+    padding-left: 12px !important;
+}

@@ -74,21 +74,38 @@ document.getElementById('signinBtn').onclick = async () => {
   }catch(e){ showAuthMsg(e.message, false); }
 };
 document.getElementById('loginPass').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('signinBtn').click(); });
-
 document.getElementById('signupBtn').onclick = async () => {
   const username = document.getElementById('suUsername').value.trim();
   const email = document.getElementById('suEmail').value.trim();
+
   if (!/^[A-Za-z0-9._%+-]+@gmail\.com$/i.test(email)) {
     alert("Please enter a valid Gmail address ending with @gmail.com");
     return;
-}
-  const password = document.getElementById('suPass').value;
-  try{
-    await api('/api/signup', {method:'POST', body:JSON.stringify({username,email,password})});
+  }
+
+  const password = document.getElementById('suPassword').value;
+
+  // ADD THESE 3 LINES
+  const confirmPassword = document.getElementById('suConfirmPassword').value;
+
+  if (password !== confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
+
+  try {
+    await api('/api/signup', {
+      method: 'POST',
+      body: JSON.stringify({username, email, password})
+    });
+
     showAuthMsg('Account created — you can sign in now.', true);
     document.getElementById('tabSignin').click();
     document.getElementById('loginId').value = username;
-  }catch(e){ showAuthMsg(e.message, false); }
+
+  } catch(e) {
+    showAuthMsg(e.message, false);
+  }
 };
 
 /* ---------------- Forgot password ---------------- */
@@ -566,4 +583,42 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
+});
+const togglePassword = document.getElementById("togglePassword");
+const loginPass = document.getElementById("loginPass");
+
+if (togglePassword && loginPass) {
+    togglePassword.addEventListener("click", () => {
+        const isPassword = loginPass.type === "password";
+
+        loginPass.type = isPassword ? "text" : "password";
+        togglePassword.textContent = isPassword ? "🙈" : "👁";
+    });
+}
+
+// ===== SOCIAL LOGIN BUTTONS =====
+// Show/hide signup password
+document.getElementById("toggleSignupPassword")?.addEventListener("click", function () {
+    const input = document.getElementById("suPassword");
+
+    if (input.type === "password") {
+        input.type = "text";
+        this.textContent = "🙈";
+    } else {
+        input.type = "password";
+        this.textContent = "👁";
+    }
+});
+
+// Show/hide confirm password
+document.getElementById("toggleConfirmPassword")?.addEventListener("click", function () {
+    const input = document.getElementById("suConfirmPassword");
+
+    if (input.type === "password") {
+        input.type = "text";
+        this.textContent = "🙈";
+    } else {
+        input.type = "password";
+        this.textContent = "👁";
+    }
 });
